@@ -50,14 +50,14 @@ class EventController extends Controller
         return redirect('/event');
     }
 
-    function show($id) {
+    public function show($id)
+    {
         $event = Event::find($id);
         $avgRating = Rating::where('event_id', $event->id)->avg('star');
-        return view('page/event-show', [
-            'eventList' => $event,
-            'avgRating' => $avgRating,
-        ]); 
+    
+        return view('page/event-show', compact('event', 'avgRating'));
     }
+    
 
     function edit($id) {
         $event = Event::find($id);
@@ -65,25 +65,38 @@ class EventController extends Controller
             'eventList' => $event
         ]);
     }
-
-    function update(Request $request, $id) {
-        $event = Event::find($id);
-        $validateData = $request->validate([
-            'name_event' => 'required',
-            'location' => 'required',
-            'date' => 'required',
-            'description_event' => 'required'
+    public function update(Request $request, $id)
+    {
+        // Validate and update the event data
+        $request->validate([
+            'name_event' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'date' => 'required|date',
+            'description_event' => 'required|string',
+            'image' => 'nullable|image|max:2048', // Example validation for image upload
         ]);
-        $event->name_event = $validateData['name_event'];
-        $event->location = $validateData['location'];
-        $event->date = $validateData['date'];
-        $event->description_event = $validateData['description_event'];
+
+        $event = Event::findOrFail($id);
+        $event->name_event = $request->input('name_event');
+        $event->location = $request->input('location');
+        $event->date = $request->input('date');
+        $event->description_event = $request->input('description_event');
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('event_images', 'public');
+            $event->event_image = $imagePath;
+        }
+
         $event->save();
-        return redirect()->route('index');
+
+        return response()->json([
+            'message' => 'Event updated successfully!',
+            'data' => $event
+        ]);
     }
 
-    function destroy($id) {
-        $event = event::where('id', $id);
+    public function destroy($id) {
+        $event = Event::findOrFail($id);
         $event->delete();
         return redirect('/event');
     }

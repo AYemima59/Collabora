@@ -97,7 +97,7 @@ body{
 
 .card-image img {
     border-radius: 20px 20px 0px 0px;
-    width: 100%;
+    width: 60%;
     height: auto;
 }
 
@@ -106,12 +106,12 @@ body{
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
-    padding: 15px;
+    padding: 17px;
     height: 100%; /* Ensure content stretches to fill card */
 }
 
 .card-content h2 {
-    margin-top: 15px;
+    margin-top: 10px;
     font-weight: 100;
     flex-grow: 1;
 }

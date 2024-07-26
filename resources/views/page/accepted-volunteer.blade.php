@@ -5,9 +5,7 @@
         dd($volunteerList);
         @endphp --}}
         <table id="example" class="hover" style="width:100%">
-            <div class="d-flex justify-content-center">
-                <a href="/reward/{{$event->id}}" class="btn btn-danger">Reward</a>
-            </div>
+            
               
             <thead>
                 <tr>

@@ -61,7 +61,7 @@
                                 <span class="overlay"> </span>
 
                                 <div class="card-image">
-                                    <img src="/storage/{{$event->event_image}}" alt="" class="card-img">
+                                    <img src="{{ asset('storage/' . $event->event_image) }}" alt="Event Image" class="card-img">
                                 </div>
                             </div>
 

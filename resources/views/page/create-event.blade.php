@@ -31,7 +31,7 @@
                 </div>
                 <div class="row mb-3 mx-4">
                     <label for="image" class="form-label mb-3">Upload Logo</label>
-                    <input type="file" class="form-control" id="image-file" name="image">
+                    <input type="file" class="form-control" id="event_image" name="image" accept="image/*">
                 </div>
             </div>
 
@@ -47,44 +47,56 @@
             </div>
         </form>
     </div>
+ <!-- Include SweetAlert2 Library -->
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
+        <!-- Script to Handle Form Submission -->
+        <script>
+        // Pastikan ini dijalankan setelah DOM selesai dimuat
         document.addEventListener("DOMContentLoaded", function() {
-            const form = document.getElementById('eventForm');
+            // Ambil formulir
+            const form = document.getElementById('updateEventForm');
+
+            // Tambahkan event listener untuk pengiriman formulir
             form.addEventListener('submit', function(event) {
+                // Hentikan aksi default pengiriman formulir
                 event.preventDefault();
-                fetch('/event', {
+
+                // Kirim data formulir menggunakan fetch atau AJAX
+                fetch(form.action, {
                     method: 'POST',
                     body: new FormData(form),
                 })
                 .then(response => {
+                    // Periksa status respons
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
+                    // Jika berhasil, tampilkan SweetAlert
                     return Swal.fire({
                         title: 'Success!',
-                        text: 'Event has been created successfully.',
+                        text: 'Event has been updated successfully.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then((result) => {
-                        // redirek
+                        // Redirect ke halaman event setelah menekan tombol OK
                         if (result.isConfirmed) {
                             window.location.href = "/event";
                         }
                     });
                 })
-                // kalau eror
                 .catch(error => {
+                    // Tangani kesalahan jika ada
                     console.error('There was an error!', error);
+                    // Tampilkan SweetAlert jika terjadi kesalahan
                     Swal.fire({
                         title: 'Error!',
-                        text: 'There was an error while creating the event.',
+                        text: 'There was an error while updating the event.',
                         icon: 'error',
                         confirmButtonText: 'OK'
                     });
                 });
             });
         });
-    </script>
+    </script>   
 @endsection
